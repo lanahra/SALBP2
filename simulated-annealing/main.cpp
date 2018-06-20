@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -51,8 +52,10 @@ Instance parseInstance(std::string instancePath, unsigned m) {
 }
 
 int main(int argc, char **argv) {
-    if (argc != 3) {
-        fprintf(stderr, "Usage: INSTANCE WORKSTATIONS\n");
+    std::istringstream ss;
+
+    if (argc != 4) {
+        fprintf(stderr, "Usage: INSTANCE WORKSTATIONS SEED\n");
         exit(EXIT_FAILURE);
     }
 
@@ -61,8 +64,17 @@ int main(int argc, char **argv) {
 
     /* number of workstations */
     unsigned m;
-    std::istringstream ss(argv[2]);
+    ss.str(argv[2]);
     ss >> m;
+    ss.clear();
 
     Instance instance = parseInstance(instancePath, m);
+
+    /* seed for random number generation */
+    unsigned seed;
+    ss.str(argv[3]);
+    ss >> seed;
+    ss.clear();
+
+    std::srand(seed);
 }
