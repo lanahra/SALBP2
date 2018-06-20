@@ -1,9 +1,10 @@
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
-#include "instance.h"
+#include "solution.h"
 
 Instance parseInstance(std::string instancePath, unsigned m) {
     /* number of tasks */
@@ -31,7 +32,7 @@ Instance parseInstance(std::string instancePath, unsigned m) {
     }
 
     /* precedence graph */
-    std::vector<std::vector<int>> A(n, std::vector<int>(n));
+    std::vector<std::pair<unsigned, unsigned>> A;
 
     while (std::getline(instanceFile, line)) {
         int u;
@@ -45,10 +46,29 @@ Instance parseInstance(std::string instancePath, unsigned m) {
             break;
         }
 
-        A[u][v] = 1;
+        A.push_back(std::make_pair(u, v));
     }
 
-    return Instance(m, t, A);
+    return Instance(n, m, t, A);
+}
+
+Solution simulatedAnnealing(Instance instance) {
+    Solution initial(instance);
+    Solution best = initial;
+
+    return best;
+}
+
+void printSolution(Solution solution) {
+    std::cout << "Best solution found\n";
+    std::cout << "Cycle time: " << solution.getCycleTime() << "\n";
+    std::cout << "#Task\t#Station\n";
+
+    unsigned task = 0;
+    for (unsigned station : solution.getTasks()) {
+        std::cout << task << "\t" << station << "\n";
+        task++;
+    }
 }
 
 int main(int argc, char **argv) {
@@ -77,4 +97,8 @@ int main(int argc, char **argv) {
     ss.clear();
 
     std::srand(seed);
+
+    Solution solution = simulatedAnnealing(instance);
+
+    printSolution(solution);
 }

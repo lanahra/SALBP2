@@ -1,7 +1,7 @@
-SRC = main.cpp instance.cpp
+SRC = main.cpp instance.cpp solution.cpp
 
 all:
-	g++ $(SRC) -o main
+	g++ $(SRC) -o salbp2-sa
 
 clean:
-	rm main
+	rm salbp2-sa
