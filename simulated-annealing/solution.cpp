@@ -1,4 +1,3 @@
-#include <iostream>
 #include "solution.h"
 
 Solution::Solution(Instance instance)

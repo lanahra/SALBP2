@@ -1,3 +1,4 @@
+#include <chrono>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -54,7 +55,7 @@ Instance parseInstance(std::string instancePath, unsigned m) {
 
 Solution simulatedAnnealing(Instance instance, unsigned steps) {
     Solution current(instance);
-    std::cout << "Initial solution: " << current.getCycleTime() << "\n";
+    std::cout << current.getCycleTime() << ", ";
     Solution best = current;
 
     double temperature;
@@ -80,7 +81,7 @@ Solution simulatedAnnealing(Instance instance, unsigned steps) {
 }
 
 void printSolution(Solution solution) {
-    std::cout << "Best solution: " << solution.getCycleTime() << "\n";
+    std::cout << solution.getCycleTime() << "\n";
     std::cout << "#Task\t#Station\n";
 
     unsigned task = 0;
@@ -123,7 +124,17 @@ int main(int argc, char **argv) {
     ss >> steps;
     ss.clear();
 
+    std::cout << "initial, time, best" << std::endl;
+
+    auto start = std::chrono::system_clock::now();
+
     Solution solution = simulatedAnnealing(instance, steps);
+
+    auto end = std::chrono::system_clock::now();
+    auto time = end - start;
+    auto seconds = std::chrono::duration_cast<std::chrono::duration<double>>(time);
+
+    std::cout << seconds.count() << ", ";
 
     printSolution(solution);
 }
