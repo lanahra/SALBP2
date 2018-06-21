@@ -52,16 +52,36 @@ Instance parseInstance(std::string instancePath, unsigned m) {
     return Instance(n, m, t, A);
 }
 
-Solution simulatedAnnealing(Instance instance) {
-    Solution initial(instance);
-    Solution best = initial;
+Solution simulatedAnnealing(Instance instance, unsigned steps) {
+    Solution current(instance);
+    std::cout << "Initial solution: " << current.getCycleTime() << "\n";
+    Solution best = current;
+
+    double temperature;
+
+    for (int k = 0; k <= steps; k++) {
+        temperature = 1.0 - (k / steps);
+        double r = (double) std::rand() / RAND_MAX;
+
+        Solution neighbour(current);
+        neighbour.change(instance);
+
+        if (neighbour.getCycleTime() < current.getCycleTime()) {
+            current = neighbour;
+        } else if (temperature > r) {
+            current = neighbour;
+        }
+
+        if (current.getCycleTime() < best.getCycleTime()) {
+            best = current;
+        }
+    }
 
     return best;
 }
 
 void printSolution(Solution solution) {
-    std::cout << "Best solution found\n";
-    std::cout << "Cycle time: " << solution.getCycleTime() << "\n";
+    std::cout << "Best solution: " << solution.getCycleTime() << "\n";
     std::cout << "#Task\t#Station\n";
 
     unsigned task = 0;
@@ -74,8 +94,8 @@ void printSolution(Solution solution) {
 int main(int argc, char **argv) {
     std::istringstream ss;
 
-    if (argc != 4) {
-        fprintf(stderr, "Usage: INSTANCE WORKSTATIONS SEED\n");
+    if (argc != 5) {
+        fprintf(stderr, "Usage: INSTANCE WORKSTATIONS SEED STEPS\n");
         exit(EXIT_FAILURE);
     }
 
@@ -98,7 +118,13 @@ int main(int argc, char **argv) {
 
     std::srand(seed);
 
-    Solution solution = simulatedAnnealing(instance);
+    /* number of steps */
+    unsigned steps;
+    ss.str(argv[4]);
+    ss >> steps;
+    ss.clear();
+
+    Solution solution = simulatedAnnealing(instance, steps);
 
     printSolution(solution);
 }

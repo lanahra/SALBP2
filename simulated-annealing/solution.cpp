@@ -20,6 +20,19 @@ Solution::Solution(Instance instance)
     cycleTime = *std::max_element(time.begin(), time.end());
 }
 
+void Solution::change(Instance instance) {
+    unsigned task = std::rand() % instance.getTasks();
+    unsigned station = std::rand() % instance.getStations();
+
+    std::vector<unsigned> times = instance.getTime();
+
+    time[tasks[task]] -= times[task];
+    tasks[task] = station;
+    time[station] += times[task];
+
+    cycleTime = *std::max_element(time.begin(), time.end());
+}
+
 bool Solution::isValid(Instance instance) {
     std::vector<std::pair<unsigned, unsigned>> A = instance.getPrecedence();
 
