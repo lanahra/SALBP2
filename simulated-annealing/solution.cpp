@@ -8,29 +8,36 @@ Solution::Solution(Instance instance)
     unsigned n = instance.getTasks();
     unsigned m = instance.getStations();
 
-    std::fill(time.begin(), time.end(), 0);
+    do {
+        std::fill(time.begin(), time.end(), 0);
 
-    for (int i = 0; i < n; i++) {
-        unsigned station = std::rand() % m;
+        for (int i = 0; i < n; i++) {
+            unsigned station = 0;
 
-        tasks[i] = station;
-        time[station] += instance.getTime()[i];
-    }
+            tasks[i] = station;
+            time[station] += instance.getTime()[i];
+        }
 
-    cycleTime = *std::max_element(time.begin(), time.end());
+        cycleTime = *std::max_element(time.begin(), time.end());
+    } while (!isValid(instance));
 }
 
-void Solution::change(Instance instance) {
-    unsigned task = std::rand() % instance.getTasks();
-    unsigned station = std::rand() % instance.getStations();
+Solution::Solution(Instance instance, Solution solution) {
+    do {
+        tasks = solution.getTasks();
+        time = solution.getTime();
 
-    std::vector<unsigned> times = instance.getTime();
+        unsigned task = std::rand() % instance.getTasks();
+        unsigned station = std::rand() % instance.getStations();
 
-    time[tasks[task]] -= times[task];
-    tasks[task] = station;
-    time[station] += times[task];
+        std::vector<unsigned> times = instance.getTime();
 
-    cycleTime = *std::max_element(time.begin(), time.end());
+        time[tasks[task]] -= times[task];
+        tasks[task] = station;
+        time[station] += times[task];
+
+        cycleTime = *std::max_element(time.begin(), time.end());
+    } while (!isValid(instance));
 }
 
 bool Solution::isValid(Instance instance) {
@@ -41,7 +48,6 @@ bool Solution::isValid(Instance instance) {
         unsigned v = pair.second;
 
         if (tasks[u] > tasks[v]) {
-            std::cout << tasks[u] << ", " << tasks[v] << "\n";
             return false;
         }
     }
@@ -51,6 +57,10 @@ bool Solution::isValid(Instance instance) {
 
 std::vector<unsigned> Solution::getTasks() {
     return this->tasks;
+}
+
+std::vector<unsigned> Solution::getTime() {
+    return this->time;
 }
 
 unsigned Solution::getCycleTime() {

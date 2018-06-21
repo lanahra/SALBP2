@@ -46,7 +46,7 @@ Instance parseInstance(std::string instancePath, unsigned m) {
             break;
         }
 
-        A.push_back(std::make_pair(u, v));
+        A.push_back(std::make_pair(u - 1, v - 1));
     }
 
     return Instance(n, m, t, A);
@@ -60,11 +60,10 @@ Solution simulatedAnnealing(Instance instance, unsigned steps) {
     double temperature;
 
     for (int k = 0; k <= steps; k++) {
-        temperature = 1.0 - (k / steps);
+        temperature = 1.0 - ((double) k / steps);
         double r = (double) std::rand() / RAND_MAX;
 
-        Solution neighbour(current);
-        neighbour.change(instance);
+        Solution neighbour(instance, current);
 
         if (neighbour.getCycleTime() < current.getCycleTime()) {
             current = neighbour;

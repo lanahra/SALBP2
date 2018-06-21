@@ -11,8 +11,9 @@ class Solution {
 
     public:
         Solution(Instance instance);
-        void change(Instance instance);
+        Solution(Instance instance, Solution solution);
         bool isValid(Instance instance);
         std::vector<unsigned> getTasks();
+        std::vector<unsigned> getTime();
         unsigned getCycleTime();
 };
