@@ -8,6 +8,7 @@ Solution::Solution(Instance instance)
     unsigned n = instance.getTasks();
     unsigned m = instance.getStations();
 
+    /* create a valid solution by assigning all tasks to station 0 */
     do {
         std::fill(time.begin(), time.end(), 0);
 
@@ -27,16 +28,20 @@ Solution::Solution(Instance instance, Solution solution) {
         tasks = solution.getTasks();
         time = solution.getTime();
 
+        /* choose a task and a station randomly */
         unsigned task = std::rand() % instance.getTasks();
         unsigned station = std::rand() % instance.getStations();
 
         std::vector<unsigned> times = instance.getTime();
 
+        /* assign task to new station and recalculate cycle time */
         time[tasks[task]] -= times[task];
         tasks[task] = station;
         time[station] += times[task];
 
         cycleTime = *std::max_element(time.begin(), time.end());
+
+        /* repeat until a valid neighbouring solution is found */
     } while (!isValid(instance));
 }
 
