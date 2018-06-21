@@ -95,7 +95,11 @@ int main(int argc, char **argv) {
     std::istringstream ss;
 
     if (argc != 5) {
-        fprintf(stderr, "Usage: INSTANCE WORKSTATIONS SEED STEPS\n");
+        fprintf(stderr, "Usage: salbp2-sa INSTANCE WORKSTATIONS SEED STEPS\n");
+        fprintf(stderr, "\tINSTANCE instance file\n");
+        fprintf(stderr, "\tWORKSTATIONS fixed number of workstations\n");
+        fprintf(stderr, "\tSEED seed for random number generation\n");
+        fprintf(stderr, "\tSTEPS number of iterations\n");
         exit(EXIT_FAILURE);
     }
 
