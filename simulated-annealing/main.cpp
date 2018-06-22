@@ -7,9 +7,9 @@
 #include <vector>
 #include "solution.h"
 
-Instance parseInstance(std::string instancePath, unsigned m) {
+Instance parseInstance(std::string instancePath, unsigned number_of_workstations) {
     /* number of tasks */
-    unsigned n;
+    unsigned number_of_tasks;
 
     std::string line;
     std::ifstream instanceFile(instancePath);
@@ -17,23 +17,23 @@ Instance parseInstance(std::string instancePath, unsigned m) {
     /* parse number of tasks */
     std::getline(instanceFile, line);
     std::istringstream ss(line);
-    ss >> n;
+    ss >> number_of_tasks;
 
     /* execution time of each task */
-    std::vector<unsigned> t(n);
+    std::vector<unsigned> execution_time(number_of_tasks);
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < number_of_tasks; i++) {
         unsigned time;
 
         std::getline(instanceFile, line);
         std::istringstream ss(line);
         ss >> time;
 
-        t[i] = time;
+        execution_time[i] = time;
     }
 
     /* precedence graph */
-    std::vector<std::pair<unsigned, unsigned>> A;
+    std::vector<std::pair<unsigned, unsigned>> precedence;
 
     while (std::getline(instanceFile, line)) {
         int u;
@@ -47,10 +47,10 @@ Instance parseInstance(std::string instancePath, unsigned m) {
             break;
         }
 
-        A.push_back(std::make_pair(u - 1, v - 1));
+        precedence.push_back(std::make_pair(u - 1, v - 1));
     }
 
-    return Instance(n, m, t, A);
+    return Instance(number_of_tasks, number_of_workstations, execution_time, precedence);
 }
 
 Solution simulatedAnnealing(Instance instance, unsigned steps) {
@@ -107,12 +107,12 @@ int main(int argc, char **argv) {
     const std::string instancePath(argv[1]);
 
     /* number of workstations */
-    unsigned m;
+    unsigned number_of_workstations;
     ss.str(argv[2]);
-    ss >> m;
+    ss >> number_of_workstations;
     ss.clear();
 
-    Instance instance = parseInstance(instancePath, m);
+    Instance instance = parseInstance(instancePath, number_of_workstations);
 
     /* seed for random number generation */
     unsigned seed;

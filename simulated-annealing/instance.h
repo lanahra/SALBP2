@@ -2,23 +2,23 @@
 
 class Instance {
     /* number of tasks */
-    unsigned n;
+    unsigned number_of_tasks;
 
     /* number of workstations */
-    unsigned m;
+    unsigned number_of_workstations;
 
     /* execution time of each task */
-    std::vector<unsigned> t;
+    std::vector<unsigned> execution_time;
 
     /* precedence graph */
-    std::vector<std::pair<unsigned, unsigned>> A;
+    std::vector<std::pair<unsigned, unsigned>> precedence;
 
     public:
         Instance(
-            unsigned n,
-            unsigned m,
-            std::vector<unsigned> t,
-            std::vector<std::pair<unsigned, unsigned>> A);
+            unsigned number_of_tasks,
+            unsigned number_of_workstations,
+            std::vector<unsigned> execution_time,
+            std::vector<std::pair<unsigned, unsigned>> precedence);
         unsigned getTasks();
         unsigned getStations();
         std::vector<unsigned> getTime();

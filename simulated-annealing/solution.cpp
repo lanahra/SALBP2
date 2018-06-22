@@ -4,14 +4,14 @@ Solution::Solution(Instance instance)
     : tasks(instance.getTasks())
     , time(instance.getStations())
 {
-    unsigned n = instance.getTasks();
-    unsigned m = instance.getStations();
+    unsigned number_of_tasks = instance.getTasks();
+    unsigned number_of_workstations = instance.getStations();
 
     /* create a valid solution by assigning all tasks to station 0 */
     do {
         std::fill(time.begin(), time.end(), 0);
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < number_of_tasks; i++) {
             unsigned station = 0;
 
             tasks[i] = station;
